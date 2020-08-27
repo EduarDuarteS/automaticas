@@ -1,7 +1,7 @@
-// 3. Visite la página de desafios y cree un desafio público.
-context('Create Desafio public ok', () => {
+// 4. Realice una prueba de Creación de un hábito
+context('Create Desafio habito ok', () => {
 
-  it('create desafio pulic OK', () => {
+  it('crear habito pulic OK', () => {
 
     //1. Realizamos login
     cy.visit('https://habitica.com/static/home')
@@ -18,25 +18,64 @@ context('Create Desafio public ok', () => {
     cy.get('h3>span').contains('eduardd').should('have.value', "");
     cy.get('span.mr-1').contains('@eduardd').should('have.value', "");
 
-    //3. ir a Desafios>Mis Desafios>Crear Desafio  
-    cy.get('.topbar-item').eq(6).click();
-    cy.get('a[href="/challenges/myChallenges"]').eq(0).click();
-    cy.get('.create-challenge-button').click()
+    //3. ir a Añadir tarea>Hábito
+    cy.get('#create-task-btn').click();
+    // cy.get('.create-task-btn').eq(1).click(); Crear tarea diaria
+    cy.get('.create-task-btn').eq(0).click(); 
 
-    // Se llena el formulario con los datos del desafio
-    cy.wait(3000);
-    cy.get('.form-group>input.form-control').eq(1).type("Automatizar Pruebas").should("have.value","Automatizar Pruebas");
-    cy.get('.form-group>input.form-control').eq(2).type("Automatizar").should("have.value","Automatizar");
-    cy.get('.summary-textarea').type("Vamos todos a trabajar en la automatización de pruebas de habitica").should('have.value', "Vamos todos a trabajar en la automatización de pruebas de habitica");
-    cy.get('.description-textarea').type("Se va a utilizar Cypress para automatizar las pruebas de habitica").should('have.value', "Se va a utilizar Cypress para automatizar las pruebas de habitica");
-    cy.get('select').select('Desafíos públicos');
-    cy.get('.category-select').click();
-    cy.wait(3000);
-    cy.get('#challenge-modal-cat-academics').check();
-    cy.get('.btn-primary').eq(3).click();
+    
+    // 4. llenar el formulario de hábito
+    cy.get('.task-purple-modal-input').eq(0).type("probar").should("have.value", "probar");
+    cy.get('.task-purple-modal-input').eq(1).type("tomar el hábito de hacer testing")
+    .should("have.value", "tomar el hábito de hacer testing");
+    cy.get('.btn-footer').click();
+
+    // 5. Validar que se cree el hábito 
+    cy.get('p').contains('probar').should("have.value","probar");
 
   })
 });
+
+
+// // 3. Visite la página de desafios y cree un desafio público.
+// context('Create Desafio public ok', () => {
+
+//   it('create desafio pulic OK', () => {
+
+//     //1. Realizamos login
+//     cy.visit('https://habitica.com/static/home')
+//     cy.get('.login-button').click(), { responseTimeout: 15000 };
+
+//     // * Se agrega un Wait para que cargue la pagina
+//     cy.wait(1000);
+//     cy.get('#usernameInput').type('eduardd').should('have.value', 'eduardd');
+//     cy.get('#passwordInput').type('alamedida');
+//     cy.get('.btn-info[type="submit"]').click()
+
+//     //2. Se valida que Se realice el login y muestre el usuario correcto
+//     cy.wait(3000);
+//     cy.get('h3>span').contains('eduardd').should('have.value', "");
+//     cy.get('span.mr-1').contains('@eduardd').should('have.value', "");
+
+//     //3. ir a Desafios>Mis Desafios>Crear Desafio  
+//     cy.get('.topbar-item').eq(6).click();
+//     cy.get('a[href="/challenges/myChallenges"]').eq(0).click();
+//     cy.get('.create-challenge-button').click()
+
+//     // Se llena el formulario con los datos del desafio
+//     cy.wait(3000);
+//     cy.get('.form-group>input.form-control').eq(1).type("Automatizar Pruebas").should("have.value","Automatizar Pruebas");
+//     cy.get('.form-group>input.form-control').eq(2).type("Automatizar").should("have.value","Automatizar");
+//     cy.get('.summary-textarea').type("Vamos todos a trabajar en la automatización de pruebas de habitica").should('have.value', "Vamos todos a trabajar en la automatización de pruebas de habitica");
+//     cy.get('.description-textarea').type("Se va a utilizar Cypress para automatizar las pruebas de habitica").should('have.value', "Se va a utilizar Cypress para automatizar las pruebas de habitica");
+//     cy.get('select').select('Desafíos públicos');
+//     cy.get('.category-select').click();
+//     cy.wait(3000);
+//     cy.get('#challenge-modal-cat-academics').check();
+//     cy.get('.btn-primary').eq(3).click();
+
+//   })
+// });
 
 
 
