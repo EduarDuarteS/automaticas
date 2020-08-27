@@ -1,55 +1,126 @@
+// 3. Visite la página de desafios y cree un desafio público.
+context('Create Desafio public ok', () => {
 
-// datos 
-// eduardd e.duartes@uniandes.edu.co alamedida
+  it('create desafio pulic OK', () => {
 
-context('Login Tests', () => {
+    //1. Realizamos login
+    cy.visit('https://habitica.com/static/home')
+    cy.get('.login-button').click(), { responseTimeout: 15000 };
 
-    it('makes a wrong login attemp', () => {
-        cy.visit('https://habitica.com/static/home')
-        // cy.visit('https://habitica.com/login')
+    // * Se agrega un Wait para que cargue la pagina
+    cy.wait(1000);
+    cy.get('#usernameInput').type('eduardd').should('have.value', 'eduardd');
+    cy.get('#passwordInput').type('alamedida');
+    cy.get('.btn-info[type="submit"]').click()
 
-       
-        cy.get('.login-button').click(), { responseTimeout: 15000 };
+    //2. Se valida que Se realice el login y muestre el usuario correcto
+    cy.wait(3000);
+    cy.get('h3>span').contains('eduardd').should('have.value', "");
+    cy.get('span.mr-1').contains('@eduardd').should('have.value', "");
 
-        /**
-         * Se agrega un Wait para que cargue la pagina
-         */
-        cy.wait(1000);
+    //3. ir a Desafios>Mis Desafios>Crear Desafio  
+    cy.get('.topbar-item').eq(6).click();
+    cy.get('a[href="/challenges/myChallenges"]').eq(0).click();
+    cy.get('.create-challenge-button').click()
 
-        cy.get('#usernameInput').type('fake@email.com').should('have.value', 'fake@email.com');
-        cy.get('#passwordInput').type('fake@email.com');
+    // Se llena el formulario con los datos del desafio
+    cy.wait(3000);
+    cy.get('.form-group>input.form-control').eq(1).type("Automatizar Pruebas").should("have.value","Automatizar Pruebas");
+    cy.get('.form-group>input.form-control').eq(2).type("Automatizar").should("have.value","Automatizar");
+    cy.get('.summary-textarea').type("Vamos todos a trabajar en la automatización de pruebas de habitica").should('have.value', "Vamos todos a trabajar en la automatización de pruebas de habitica");
+    cy.get('.description-textarea').type("Se va a utilizar Cypress para automatizar las pruebas de habitica").should('have.value', "Se va a utilizar Cypress para automatizar las pruebas de habitica");
+    cy.get('select').select('Desafíos públicos');
+    cy.get('.category-select').click();
+    cy.wait(3000);
+    cy.get('#challenge-modal-cat-academics').check();
+    cy.get('.btn-primary').eq(3).click();
 
-        cy.get('.btn-info[type="submit"]').click()
-
-        cy.contains("dirección de correo electrónico o contraseña son incorrectos").should('be.visible')
-
-      })
+  })
 });
 
-// Pruebe el comportamiento de la página cuando se trata de realizar un registro con datos de una cuenta ya existente
 
-context('Register Test fail', () => {
 
-    it('makes a wrong Register attemp', () => {
-        cy.visit('https://habitica.com/static/home')
- 
-        
-        //Se ingresa el usuario ya registrado
-        cy.get('#usernameInput').type('eduardd').should('have.value', 'eduardd');
-        //Se validad que se despliegue el mesaje de error por no ser un usuario disponible
-        cy.get(".input-error").should('be.visible');
-        //Se validad que el mensaje de error sea el indicado par ausuario ya escogido
-        cy.get(".input-error").contains('Este nombre de usuario ya está cogido.');
 
-        cy.get('.form-control[type="email"]').type('e.duartes@uniandes.edu.co').should('have.value', 'e.duartes@uniandes.edu.co');
-        
-        cy.get('[placeholder="Contraseña"]').type('12345678').should('have.value', '12345678');
-        cy.get('[type="password"]').eq(1).type('12345678').should('have.value', '12345678'), { responseTimeout: 15000 };
 
-        //Al tener un username no permitido (ya que este existe) el botón se encuentra desabilitado
-        cy.get('.sign-up[type="submit"]').should('be.disabled')
-        
-        // cy.get('.sign-up[type="submit"]').click()
-        
-      })
-});
+// // datos 
+// // eduardd e.duartes@uniandes.edu.co alamedida
+// // 1. Cree una cuenta manualmente y pruebe automatizadamente el login correcto
+// context('Login Tests Sucess', () => {
+
+//   it('makes a wrong login attemp', () => {
+//     cy.visit('https://habitica.com/static/home')
+
+//     cy.get('.login-button').click(), { responseTimeout: 15000 };
+
+//     // * Se agrega un Wait para que cargue la pagina
+//     cy.wait(1000);
+
+//     cy.get('#usernameInput').type('eduardd').should('have.value', 'eduardd');
+//     cy.get('#passwordInput').type('alamedida');
+
+//     cy.get('.btn-info[type="submit"]').click()
+//     // Se revisa que no presente mesaje de error al hacer login
+//     // cy.contains("dirección de correo electrónico o contraseña son incorrectos").should('be.visible')
+
+//     // Se valida que Se realice el login y muestre el usuario correcto
+//     cy.wait(3000);
+//     cy.get('h3>span').contains('eduardd').should('have.value', "");
+//     // cy.contains("eduardd").should('be.visible')
+//     cy.get('span.mr-1').contains('@eduardd').should('have.value', "");
+
+//   })
+// });
+
+
+// // datos 
+// // eduardd e.duartes@uniandes.edu.co alamedida
+// // 2. Pruebe el comportamiento de la página cuando se trata de realizar un registro con datos de una cuenta ya existente. 
+// // Use los datos de la cuenta que creo en el punto anterior.
+// context('Register Test fail', () => {
+
+//   it('makes a wrong Register attemp', () => {
+//     cy.visit('https://habitica.com/static/home')
+
+
+//     //Se ingresa el usuario ya registrado
+//     cy.get('#usernameInput').type('eduardd').should('have.value', 'eduardd');
+//     //Se validad que se despliegue el mesaje de error por no ser un usuario disponible
+//     cy.get(".input-error").should('be.visible');
+//     //Se validad que el mensaje de error sea el indicado par ausuario ya escogido
+//     cy.get(".input-error").contains('Este nombre de usuario ya está cogido.');
+
+//     cy.get('.form-control[type="email"]').type('e.duartes@uniandes.edu.co').should('have.value', 'e.duartes@uniandes.edu.co');
+
+//     cy.get('[placeholder="Contraseña"]').type('12345678').should('have.value', '12345678');
+//     cy.get('[type="password"]').eq(1).type('12345678').should('have.value', '12345678'), { responseTimeout: 15000 };
+
+//     //Al tener un username no permitido (ya que este existe) el botón se encuentra desabilitado
+//     cy.get('.sign-up[type="submit"]').should('be.disabled')
+
+//     // cy.get('.sign-up[type="submit"]').click()
+
+//   });
+// })
+
+
+
+// // Login fallido
+// context('Login Tests Fail', () => {
+
+//   it('makes a wrong login attemp', () => {
+//     cy.visit('https://habitica.com/static/home')
+
+//     cy.get('.login-button').click(), { responseTimeout: 15000 };
+
+//     //  * Se agrega un Wait para que cargue la pagina
+//     cy.wait(1000);
+
+//     cy.get('#usernameInput').type('fake@email.com').should('have.value', 'fake@email.com');
+//     cy.get('#passwordInput').type('fake@email.com');
+
+//     cy.get('.btn-info[type="submit"]').click()
+
+//     cy.contains("dirección de correo electrónico o contraseña son incorrectos").should('be.visible')
+
+//   })
+// });
