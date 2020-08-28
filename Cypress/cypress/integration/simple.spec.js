@@ -86,8 +86,8 @@ context('Create Desafio public ok', () => {
 
     // Se llena el formulario con los datos del desafio
     cy.wait(3000);
-    cy.get('.form-group>input.form-control').eq(1).type("Automatizar Pruebas").should("have.value","Automatizar Pruebas");
-    cy.get('.form-group>input.form-control').eq(2).type("Automatizar").should("have.value","Automatizar");
+    cy.get('.form-group>input.form-control').eq(1).type("Automatizar Pruebas").should("have.value", "Automatizar Pruebas");
+    cy.get('.form-group>input.form-control').eq(2).type("Automatizar").should("have.value", "Automatizar");
     cy.get('.summary-textarea').type("Vamos todos a trabajar en la automatización de pruebas de habitica").should('have.value', "Vamos todos a trabajar en la automatización de pruebas de habitica");
     cy.get('.description-textarea').type("Se va a utilizar Cypress para automatizar las pruebas de habitica").should('have.value', "Se va a utilizar Cypress para automatizar las pruebas de habitica");
     cy.get('select').select('Desafíos públicos');
@@ -123,17 +123,18 @@ context('Create Desafio habito ok', () => {
     //3. ir a Añadir tarea>Hábito
     cy.get('#create-task-btn').click();
     // cy.get('.create-task-btn').eq(1).click(); Crear tarea diaria
-    cy.get('.create-task-btn').eq(0).click(); 
+    cy.get('.create-task-btn').eq(0).click();
 
-    
+
     // 4. llenar el formulario de hábito
-    cy.get('.task-purple-modal-input').eq(0).type("probar").should("have.value", "probar");
+    var random = userID_Alpha();
+    cy.get('.task-purple-modal-input').eq(0).type("habito_" + random).should("have.value", "habito_" + random);
     cy.get('.task-purple-modal-input').eq(1).type("tomar el hábito de hacer testing")
-    .should("have.value", "tomar el hábito de hacer testing");
+      .should("have.value", "tomar el hábito de hacer testing");
     cy.get('.btn-footer').click();
 
     // 5. Validar que se cree el hábito 
-    cy.get('p').contains('probar').should("have.value","probar");
+    cy.get('p').contains("habito_" + random).should("have.value", "");
 
   })
 });
@@ -143,23 +144,73 @@ context('Create Desafio habito ok', () => {
 
 
 
-// // Login fallido
-// context('Login Tests Fail', () => {
+// Login fallido
+context('Login Tests Fail', () => {
 
-//   it('makes a wrong login attemp', () => {
-//     cy.visit('https://habitica.com/static/home')
+  it('makes a wrong login attemp', () => {
+    cy.visit('https://habitica.com/static/home')
 
-//     cy.get('.login-button').click(), { responseTimeout: 15000 };
+    cy.get('.login-button').click(), { responseTimeout: 15000 };
 
-//     //  * Se agrega un Wait para que cargue la pagina
-//     cy.wait(1000);
+    //  * Se agrega un Wait para que cargue la pagina
+    cy.wait(1000);
 
-//     cy.get('#usernameInput').type('fake@email.com').should('have.value', 'fake@email.com');
-//     cy.get('#passwordInput').type('fake@email.com');
+    cy.get('#usernameInput').type('fake@email.com').should('have.value', 'fake@email.com');
+    cy.get('#passwordInput').type('fake@email.com');
 
-//     cy.get('.btn-info[type="submit"]').click()
+    cy.get('.btn-info[type="submit"]').click()
 
-//     cy.contains("dirección de correo electrónico o contraseña son incorrectos").should('be.visible')
+    cy.contains("dirección de correo electrónico o contraseña son incorrectos").should('be.visible')
 
-//   })
-// });
+  })
+});
+
+// 5. Realice una prueba de Creación de una tarea diaria
+context('Create task day ok', () => {
+
+  it('crear tarea diaria OK', () => {
+
+    //1. Realizamos login
+    cy.visit('https://habitica.com/static/home')
+    cy.get('.login-button').click(), { responseTimeout: 15000 };
+
+    // * Se agrega un Wait para que cargue la pagina
+    cy.wait(1000);
+    cy.get('#usernameInput').type('eduardd').should('have.value', 'eduardd');
+    cy.get('#passwordInput').type('alamedida');
+    cy.get('.btn-info[type="submit"]').click()
+
+    //2. Se valida que Se realice el login y muestre el usuario correcto
+    cy.wait(3000);
+    cy.get('h3>span').contains('eduardd').should('have.value', "");
+    cy.get('span.mr-1').contains('@eduardd').should('have.value', "");
+
+    //3. ir a Añadir Crear tarea diaria
+    cy.get('#create-task-btn').click();
+    cy.get('.create-task-btn').eq(1).click();
+
+
+    // 4. llenar el formulario de hábito
+    var random = userID_Alpha();
+    cy.get('.task-purple-modal-input').eq(0).type("task_" + random).should("have.value", "task_" + random);
+    cy.get('.task-purple-modal-input').eq(1).type("tarea diaria de pruebas automaticas")
+      .should("have.value", "tarea diaria de pruebas automaticas");
+    cy.get('.btn-footer').click();
+
+    // 5. Validar que se cree el hábito 
+    cy.get('p').contains("task_" + random).should("have.value", "");
+
+  })
+});
+
+
+//Crear texto random
+function userID_Alpha() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+  for (var i = 0; i < 10; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
