@@ -149,6 +149,7 @@ describe('Tutorial part 6', () => {
 
     it(`updates hero name (${newHeroName}) in details view`, updateHeroNameInDetailView);
 
+    
     it(`shows ${newHeroName} in Heroes list`, () => {
       element(by.buttonText('save')).click();
       browser.waitForAngular();
@@ -209,6 +210,22 @@ describe('Tutorial part 6', () => {
       expect(addButton.getCssValue('border')).toContain('none');
       expect(addButton.getCssValue('padding')).toBe('5px 10px');
       expect(addButton.getCssValue('border-radius')).toBe('4px');
+    });
+
+  });
+
+  
+  describe('Restos Pruebas Automaticas', () => {
+
+    beforeAll(() => browser.get(''));
+    //Narco
+    it('1. Buscar héroes', () => {
+      // element(by.id('search-box')).click();
+      getPageElts().searchBox.sendKeys('Na');
+      browser.waitForAngular();
+      browser.sleep(1000);
+
+      expect(getPageElts().searchResults.count()).toBe(3);
     });
 
   });
