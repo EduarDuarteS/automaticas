@@ -26,9 +26,9 @@ class Hero {
 
   // Hero from hero list <li> element.
   static async fromLi(li: ElementFinder): Promise<Hero> {
-      let stringsFromA = await li.all(by.css('a')).getText();
-      let strings = stringsFromA[0].split(' ');
-      return { id: +strings[0], name: strings[1] };
+    let stringsFromA = await li.all(by.css('a')).getText();
+    let strings = stringsFromA[0].split(' ');
+    return { id: +strings[0], name: strings[1] };
   }
 
   // Hero id and name from the given detail element.
@@ -38,8 +38,8 @@ class Hero {
     // Get name from the h2
     let _name = await detail.element(by.css('h2')).getText();
     return {
-        id: +_id.substr(_id.indexOf(' ') + 1),
-        name: _name.substr(0, _name.lastIndexOf(' '))
+      id: +_id.substr(_id.indexOf(' ') + 1),
+      name: _name.substr(0, _name.lastIndexOf(' '))
     };
   }
 }
@@ -72,12 +72,22 @@ describe('Proyecto base', () => {
 
   describe('Initial page', () => {
 
+    //Bucar Narco -> "Na"
+    it('1. Buscar héroes', () => {
+      // element(by.id('search-box')).click();
+      getPageElts().searchBox.sendKeys('Na');
+      browser.waitForAngular();
+      browser.sleep(1000);
+
+      expect(getPageElts().searchResults.count()).toBe(3);
+    });
+
     it(`has title '${expectedTitle}'`, () => {
       expect(browser.getTitle()).toEqual(expectedTitle);
     });
 
     it(`has h1 '${expectedH1}'`, () => {
-        expectHeading(1, expectedH1);
+      expectHeading(1, expectedH1);
     });
 
     const expectedViewNames = ['Dashboard', 'Heroes'];
@@ -101,9 +111,9 @@ function addToHeroName(text: string): promise.Promise<void> {
 }
 
 function expectHeading(hLevel: number, expectedText: string): void {
-    let hTag = `h${hLevel}`;
-    let hText = element(by.css(hTag)).getText();
-    expect(hText).toEqual(expectedText, hTag);
+  let hTag = `h${hLevel}`;
+  let hText = element(by.css(hTag)).getText();
+  expect(hText).toEqual(expectedText, hTag);
 };
 
 function getHeroAEltById(id: number): ElementFinder {
@@ -119,5 +129,5 @@ function getHeroLiEltById(id: number): ElementFinder {
 async function toHeroArray(allHeroes: ElementArrayFinder): Promise<Hero[]> {
   let promisedHeroes = await allHeroes.map(Hero.fromLi);
   // The cast is necessary to get around issuing with the signature of Promise.all()
-  return <Promise<any>> Promise.all(promisedHeroes);
+  return <Promise<any>>Promise.all(promisedHeroes);
 }
