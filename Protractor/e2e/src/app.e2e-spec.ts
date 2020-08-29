@@ -2,6 +2,7 @@
 
 import { browser, element, by, ElementFinder, ElementArrayFinder } from 'protractor';
 import { promise } from 'selenium-webdriver';
+import { link } from 'fs';
 
 const expectedH1 = 'Tour of Heroes';
 const expectedTitle = `${expectedH1}`;
@@ -74,15 +75,48 @@ describe('Proyecto base', () => {
 
     //Bucar Narco -> "Na"
     it('1. Buscar héroes', () => {
+
+      //1. se ingresan los caracteres "Na"
       // element(by.id('search-box')).click();
       getPageElts().searchBox.sendKeys('Na');
       browser.waitForAngular();
       browser.sleep(1000);
 
+      //2. Se revisan que los resultados de la busqueda sean 3 elementos
       expect(getPageElts().searchResults.count()).toBe(3);
     });
 
+    //2. Eliminar un héroe
+    it(`2. Eliminar un Heroe de la lista`, async () => {
+
+      // A. Navegar a "/heroes" dando click en su boton
+      const linkHeroes = element.all(by.css('app-root nav a')).get(1);
+      linkHeroes.click();
+      // console.log(element.querySelectorAll('.link').length);
+      browser.sleep(1000);
+
+      // B. Contar Heroes de la lista
+      const listHeroes = await toHeroArray(element.all(by.css('app-root app-heroes li')));
+      var numHeroes = listHeroes.length;
+      // console.log("#heroes ", numHeroes);
+
+      // C. elimnar un heroe
+      let li = element(by.cssContainingText('li span.badge', '12')).element(by.xpath('../..'));
+      li.element(by.buttonText('x')).click();
+      browser.sleep(1000);
+
+      // D. validar que la lista tenga un heroe menos
+      const listHeroesAf = await toHeroArray(element.all(by.css('app-root app-heroes li')));
+      let numHeroesAf = listHeroesAf.length;
+      // console.log("#heroes ", numHeroesAf);
+
+      // E. Validar que tenga un heroe menos en la lista
+      expect(numHeroesAf).toEqual(numHeroes - 1, 'cantidad heroes');
+
+    });
+
     it(`has title '${expectedTitle}'`, () => {
+      element.all(by.css('app-root nav a')).get(0).click();
       expect(browser.getTitle()).toEqual(expectedTitle);
     });
 
