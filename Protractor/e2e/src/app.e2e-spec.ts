@@ -115,7 +115,43 @@ describe('Proyecto base', () => {
 
     });
 
+    // 3. Editar un héroe
+    it(`3. Editar un Heroe`, async () => {
+
+      // A. Regresar al Dashboard
+      element.all(by.css('app-root nav a')).get(0).click();
+      expect(browser.getTitle()).toEqual(expectedTitle);
+
+      //A. se ingresan los caracteres "Tornado"
+      getPageElts().searchBox.sendKeys('Tornado');
+      browser.waitForAngular();
+      // browser.sleep(2000);
+
+      // B. Seleccionar el Heroe a editar
+      getPageElts().searchResults.click();
+      // browser.sleep(2000);
+
+      // C. Editar el nombre del Heroe
+      let input = element(by.css('input'));
+      input.sendKeys("ooooo");
+      // browser.sleep(2000);
+
+      // D. Guardar la Edición 
+      element.all(by.css('app-root button')).get(1).click();
+      // browser.sleep(5000);
+
+      // E. Validar la Edición 
+      element.all(by.css('app-root nav a')).get(1).click();
+      const listHeroes = await toHeroArray(element.all(by.css('app-root app-heroes li')));
+      const expectedHeroes =  listHeroes.filter(h => h.name === 'Tornadoooooo');
+      expect('Tornadoooooo').toEqual(expectedHeroes[0].name);
+
+
+    });
+
+
     it(`has title '${expectedTitle}'`, () => {
+      // A. Regresar al Dashboard
       element.all(by.css('app-root nav a')).get(0).click();
       expect(browser.getTitle()).toEqual(expectedTitle);
     });
