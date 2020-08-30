@@ -8,12 +8,12 @@ const puppeteer = require('puppeteer');
   const page = await browser.newPage();
   await page.goto('https://angular-6-registration-login-example.stackblitz.io/register');
 
-  await page.waitFor(3000);
+  await page.waitFor(2000);
 
   //console.log(await page.content());
   await page.screenshot({path: 'example.png'});
   await page.click('button')
-  await page.waitFor(3000);
+  await page.waitFor(2000);
 
   await page.screenshot({path: 'example.png'});
 
@@ -23,14 +23,14 @@ const puppeteer = require('puppeteer');
   await (await page.$('input[formcontrolname=\'password\']')).type('mypassword');
   await page.click('button')
 
-  await page.waitFor(3000);
+  await page.waitFor(2000);
   await page.screenshot({path: 'example.png'});
 
   await (await page.$('input[formcontrolname=\'username\']')).type('Jhonnyguzz');
   await (await page.$('input[formcontrolname=\'password\']')).type('mypassword');
   await page.click('button')
 
-  await page.waitFor(3000);
+  await page.waitFor(2000);
   await page.screenshot({path: 'example.png'});
 
   await browser.close();

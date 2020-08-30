@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 
-describe("Register Users", () => {
+describe("Login and Logout Users", () => {
 
     let browser
     let page
@@ -15,7 +15,7 @@ describe("Register Users", () => {
         await browser.close();
     })
 
-    test('Should register a new user', async () => {
+    test('Login with created user', async () => {
         await page.waitFor(3000);
         await page.click('button')
         await page.waitFor(3000);
@@ -27,38 +27,39 @@ describe("Register Users", () => {
 
         await page.click('button')
         await page.waitFor(3000);
-    
-        let message = await page.$eval('[class=\'alert alert-success\']', el => el.innerText)
-        expect(message).toEqual('Registration successful')
 
-    }, 10000)
-
-    test('Should get error message', async () => {
-        await page.waitFor(3000);
-        await page.click('button')
-        await page.waitFor(3000);
-      
-        await (await page.$('input[formcontrolname=\'firstName\']')).type('Jhonatan');
-        await (await page.$('input[formcontrolname=\'lastName\']')).type('Guzmán');
         await (await page.$('input[formcontrolname=\'username\']')).type('Jhonnyguzz');
         await (await page.$('input[formcontrolname=\'password\']')).type('mypassword');
-
-        await page.click('button')
-        await page.waitFor(3000);
-    
-        await page.click('a[class=\'btn btn-link\']')
-        await page.waitFor(3000);
-
-        await (await page.$('input[formcontrolname=\'firstName\']')).type('Jhonatan');
-        await (await page.$('input[formcontrolname=\'lastName\']')).type('Guzmán');
-        await (await page.$('input[formcontrolname=\'username\']')).type('Jhonnyguzz');
-        await (await page.$('input[formcontrolname=\'password\']')).type('mypassword');
-
         await page.click('button')
         await page.waitFor(3000);
 
-        let message = await page.$eval('[class=\'alert alert-danger\']', el => el.innerText)
-        expect(message).toEqual('Username \"Jhonnyguzz\" is already taken')
+        let welcome = await page.$eval('h1', el => el.innerText)
+        expect(welcome).toEqual('Hi Jhonatan!')
 
     }, 18000)
+
+    test('Logout', async () => {
+        await page.waitFor(3000);
+        await page.click('button')
+        await page.waitFor(3000);
+      
+        await (await page.$('input[formcontrolname=\'firstName\']')).type('Jhonatan');
+        await (await page.$('input[formcontrolname=\'lastName\']')).type('Guzmán');
+        await (await page.$('input[formcontrolname=\'username\']')).type('Jhonnyguzz');
+        await (await page.$('input[formcontrolname=\'password\']')).type('mypassword');
+
+        await page.click('button')
+        await page.waitFor(3000);
+
+        await (await page.$('input[formcontrolname=\'username\']')).type('Jhonnyguzz');
+        await (await page.$('input[formcontrolname=\'password\']')).type('mypassword');
+        await page.click('button')
+        await page.waitFor(3000)
+
+        await page.click('a[href=\'/login\']')
+
+        expect(page.url()).toEqual('https://angular-6-registration-login-example.stackblitz.io/login')
+
+    }, 18000)
+
 });
