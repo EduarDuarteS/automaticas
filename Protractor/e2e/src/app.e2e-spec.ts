@@ -156,40 +156,56 @@ describe('Proyecto base', () => {
 
       // B. Navegar al heroe Celeritas desde el dasboard
       element.all(by.css('div a')).get(1).click();
-      browser.sleep(1000);
+      // browser.sleep(1000);
 
       // C. Validar que se encuentre cargado el heroe CELERITAS Details
       const name = await getPageElts().heroDetail.element(by.css('h2')).getText();
       expect('CELERITAS Details').toEqual(name);
-      });
-
-
-
-
     });
 
-    it(`has title '${expectedTitle}'`, () => {
-      // A. Regresar al Dashboard
-      element.all(by.css('app-root nav a')).get(0).click();
-      expect(browser.getTitle()).toEqual(expectedTitle);
-    });
+    // 5. Navegar a un héroe desde la lista de héroes
+    it(`5. Navegar a un héroe desde la lista de héroes`, async () => {
 
-    it(`has h1 '${expectedH1}'`, () => {
-      expectHeading(1, expectedH1);
-    });
+      // A. Navegamos en el tour of Heroes
+      element.all(by.css('app-root nav a')).get(1).click();
+      // browser.sleep(10000);
 
-    const expectedViewNames = ['Dashboard', 'Heroes'];
-    it(`has views ${expectedViewNames}`, () => {
-      let viewNames = getPageElts().navElts.map((el: ElementFinder) => el.getText());
-      expect(viewNames).toEqual(expectedViewNames);
-    });
+      // B. Seleccionamos a Bombasto para navegar a el
+      let li = element(by.cssContainingText('li span.badge', '13')).element(by.xpath('../..'));
 
-    it('has dashboard as the active view', () => {
-      let page = getPageElts();
-      expect(page.appDashboard.isPresent()).toBeTruthy();
+      // C. Damos click en el heroe de la lista "Bombasto"
+      li.click();
+      // browser.sleep(3000);
+
+      // C. Validar que se encuentre cargado el heroe BOMBASTO Details
+      const name = await getPageElts().heroDetail.element(by.css('h2')).getText();
+      expect('BOMBASTO Details').toEqual(name);
     });
 
   });
+
+  it(`has title '${expectedTitle}'`, () => {
+    // A. Regresar al Dashboard
+    element.all(by.css('app-root nav a')).get(0).click();
+    expect(browser.getTitle()).toEqual(expectedTitle);
+  });
+
+  it(`has h1 '${expectedH1}'`, () => {
+    expectHeading(1, expectedH1);
+  });
+
+  const expectedViewNames = ['Dashboard', 'Heroes'];
+  it(`has views ${expectedViewNames}`, () => {
+    let viewNames = getPageElts().navElts.map((el: ElementFinder) => el.getText());
+    expect(viewNames).toEqual(expectedViewNames);
+  });
+
+  it('has dashboard as the active view', () => {
+    let page = getPageElts();
+    expect(page.appDashboard.isPresent()).toBeTruthy();
+  });
+
+});
 
 
 function addToHeroName(text: string): promise.Promise<void> {
