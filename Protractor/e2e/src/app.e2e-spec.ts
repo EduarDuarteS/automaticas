@@ -71,7 +71,7 @@ describe('Proyecto base', () => {
     };
   }
 
-  describe('Initial page', () => {
+  describe('Pruebas pedidas de protractor', () => {
 
     //Bucar Narco -> "Na"
     it('1. Buscar héroes', () => {
@@ -143,12 +143,30 @@ describe('Proyecto base', () => {
       // E. Validar la Edición 
       element.all(by.css('app-root nav a')).get(1).click();
       const listHeroes = await toHeroArray(element.all(by.css('app-root app-heroes li')));
-      const expectedHeroes =  listHeroes.filter(h => h.name === 'Tornadoooooo');
+      const expectedHeroes = listHeroes.filter(h => h.name === 'Tornadoooooo');
       expect('Tornadoooooo').toEqual(expectedHeroes[0].name);
-
 
     });
 
+    // 4. Navegar a un héroe desde el dashboard
+    it(`4. Navegar a un héroe desde el dashboard`, async () => {
+      // A. Regresar al Dashboard
+      element.all(by.css('app-root nav a')).get(0).click();
+      expect(browser.getTitle()).toEqual(expectedTitle);
+
+      // B. Navegar al heroe Celeritas desde el dasboard
+      element.all(by.css('div a')).get(1).click();
+      browser.sleep(1000);
+
+      // C. Validar que se encuentre cargado el heroe CELERITAS Details
+      const name = await getPageElts().heroDetail.element(by.css('h2')).getText();
+      expect('CELERITAS Details').toEqual(name);
+      });
+
+
+
+
+    });
 
     it(`has title '${expectedTitle}'`, () => {
       // A. Regresar al Dashboard
@@ -173,7 +191,6 @@ describe('Proyecto base', () => {
 
   });
 
-});
 
 function addToHeroName(text: string): promise.Promise<void> {
   let input = element(by.css('input'));
