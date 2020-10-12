@@ -24,7 +24,7 @@ context('Login Tests Sucess', () => {
     cy.get('h3>span').contains('eduardd').should('have.value', "");
     // cy.contains("eduardd").should('be.visible')
     cy.get('span.mr-1').contains('@eduardd').should('have.value', "");
-
+    cy.screenshot("Login Tests Sucess - " + userID_Alpha());
   })
 });
 
@@ -55,6 +55,7 @@ context('Register Test fail', () => {
     cy.get('.sign-up[type="submit"]').should('be.disabled')
 
     // cy.get('.sign-up[type="submit"]').click()
+    cy.screenshot("Register Test fail - " + userID_Alpha());
 
   });
 })
@@ -65,7 +66,7 @@ context('Create Desafio public ok', () => {
   it('create desafio pulic OK', () => {
 
     //1. Realizamos login
-    cy.visit('https://habitica.com/static/home')
+    cy.visit('https://habitica.com/static/home');
     cy.get('.login-button').click(), { responseTimeout: 15000 };
 
     // * Se agrega un Wait para que cargue la pagina
@@ -95,6 +96,7 @@ context('Create Desafio public ok', () => {
     cy.wait(3000);
     cy.get('#challenge-modal-cat-academics').check();
     cy.get('.btn-primary').eq(3).click();
+    cy.screenshot("create desafio pulic OK - " + userID_Alpha());
 
   })
 });
@@ -135,6 +137,7 @@ context('Create Desafio habito ok', () => {
 
     // 5. Validar que se cree el hábito 
     cy.get('p').contains("habito_" + random).should("have.value", "");
+    cy.screenshot("Create Desafio habito ok - " + userID_Alpha());
 
   })
 });
@@ -161,6 +164,7 @@ context('Login Tests Fail', () => {
     cy.get('.btn-info[type="submit"]').click()
 
     cy.contains("dirección de correo electrónico o contraseña son incorrectos").should('be.visible')
+    cy.screenshot("Login Tests Fail - " + userID_Alpha());
 
   })
 });
@@ -199,6 +203,8 @@ context('Create task day ok', () => {
 
     // 5. Validar que se cree el hábito 
     cy.get('p').contains("task_" + random).should("have.value", "");
+
+    cy.screenshot("crear tarea diaria OK - " + userID_Alpha());
 
   })
 });
